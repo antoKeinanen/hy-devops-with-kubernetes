@@ -17,6 +17,7 @@
           k3d
           kubectl
           python314
+          go
         ];
 
         shellHook = ''
