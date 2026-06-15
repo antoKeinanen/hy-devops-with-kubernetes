@@ -16,5 +16,5 @@ func main() {
 	http.HandleFunc("/", hello)
 
 	fmt.Printf("Server started in port %s", port)
-	http.ListenAndServe(fmt.Sprintf("127.0.0.1:%s", port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 }
