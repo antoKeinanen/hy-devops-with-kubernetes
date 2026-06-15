@@ -16,7 +16,12 @@
         buildInputs = with pkgs; [
           k3d
           kubectl
+          python314
         ];
+
+        shellHook = ''
+          source <(kubectl completion zsh)
+        '';
       };
     };
 }
