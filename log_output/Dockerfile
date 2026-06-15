@@ -1,9 +1,10 @@
-FROM python:3.14-slim
+FROM golang:1.26-alpine
 
 WORKDIR /app
 
-COPY main.py .
+COPY . .
 
-ENV PYTHONUNBUFFERED=1
+RUN go mod tidy
 
-CMD ["python", "main.py"]
+ENTRYPOINT ["go", "run", "main.go"]
+
