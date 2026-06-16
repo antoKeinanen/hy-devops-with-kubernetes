@@ -3,14 +3,23 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func main() {
-	// Change this to the file you want to serve
 	filePath := "/usr/src/app/files/log.txt"
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filePath)
+		data, err := os.ReadFile(filePath)
+		if err != nil {
+			http.Error(w, "File not found", http.StatusNotFound)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Write(data)
+
 	})
 
 	fmt.Println("Serving", filePath, "on http://localhost:8080")
@@ -19,4 +28,3 @@ func main() {
 		fmt.Println("Server error:", err)
 	}
 }
-

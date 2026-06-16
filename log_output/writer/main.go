@@ -13,7 +13,7 @@ func main() {
 
 	filePath := "/usr/src/app/files/log.txt"
 
-	file, err := os.OpenFile(filePath, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
@@ -36,4 +36,3 @@ func main() {
 		time.Sleep(5 * time.Second)
 	}
 }
-

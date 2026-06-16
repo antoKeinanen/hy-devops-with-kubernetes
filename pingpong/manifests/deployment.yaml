@@ -12,7 +12,15 @@ spec:
       labels:
         app: pingpong
     spec:
+      volumes:
+        - name: log-output-vol
+          persistentVolumeClaim:
+            claimName: log-output-pvc
       containers:
         - name: pingpong
           image: pingpong:latest
           imagePullPolicy: Never
+          volumeMounts:
+            - name: log-output-vol
+              mountPath: /usr/src/app/files
+

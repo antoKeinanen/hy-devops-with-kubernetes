@@ -13,19 +13,20 @@ spec:
         app: log-output
     spec:
       volumes:
-        - name: log-output-vlm
-          emptyDir: {}
+        - name: log-output-vol
+          persistentVolumeClaim:
+            claimName: log-output-pvc  
       containers:
         - name: log-output-server
           image: log-output-server:latest
           imagePullPolicy: Never
           volumeMounts:
-            - name: log-output-vlm
+            - name: log-output-vol
               mountPath: /usr/src/app/files
         - name: log-output-writer
           image: log-output-writer:latest
           imagePullPolicy: Never
           volumeMounts:
-            - name: log-output-vlm
+            - name: log-output-vol
               mountPath: /usr/src/app/files
 
