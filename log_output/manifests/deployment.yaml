@@ -12,7 +12,20 @@ spec:
       labels:
         app: log-output
     spec:
+      volumes:
+        - name: log-output-vlm
+          emptyDir: {}
       containers:
-        - name: log-output
-          image: log-output:latest
+        - name: log-output-server
+          image: log-output-server:latest
           imagePullPolicy: Never
+          volumeMounts:
+            - name: log-output-vlm
+              mountPath: /usr/src/app/files
+        - name: log-output-writer
+          image: log-output-writer:latest
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: log-output-vlm
+              mountPath: /usr/src/app/files
+
