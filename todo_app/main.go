@@ -45,43 +45,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Todo App</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: white;
-      color: #333;
-      text-align: center;
-    }
-
-    .container {
-      padding-top: 85px;
-    }
-
-    h1 {
-      font-size: 64px;
-      margin: 0 0 45px;
-      font-weight: 700;
-    }
-
-    .image-card {
-      width: 400px;
-      max-width: 90vw;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-      display: block;
-      margin: 0 auto;
-    }
-
-    .caption {
-      margin-top: 45px;
-      font-size: 32px;
-      color: #666;
-    }
-  </style>
 </head>
 
 <body>
@@ -91,9 +54,22 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
     <img
       class="image-card"
       src="/image"
+      widht="250"
+      height="250"
     />
 
-    <div class="caption">DevOps with Kubernetes 2026</div>
+    <form>
+	<input placeholder="Enter a new todo (max 140 characters)" minlenght="1" maxlength="140" required />
+	<input type="submit" />
+    </form>
+
+    <ul>
+	<li>Learn kubernetes basics</li>
+	<li>Deploy application to cluster</li>
+	<li>Configure persistent groups</li>
+    </ul>
+
+    <p>DevOps with Kubernetes 2026</p>
   </main>
 </body>
 	</html>
