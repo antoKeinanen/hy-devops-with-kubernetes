@@ -18,6 +18,7 @@
           kubectl
           python314
           go
+          kubectx
         ];
 
         shellHook = ''
