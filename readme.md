@@ -10,4 +10,5 @@
 - [1.9](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/1.9)
 - [1.10](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/1.10)
 - [1.12](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/1.12)
+- [2.1](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/2.1)
 
