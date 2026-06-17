@@ -17,12 +17,18 @@ spec:
           persistentVolumeClaim:
             claimName: todo-app-pvc
       containers:
-        - name: todo-app
-          image: todo-app:latest
+        - name: todo-app-frontend
+          image: todo-app-frontend:latest
           imagePullPolicy: Never
+          volumeMounts:
+            - name: todo-app-vol
+              mountPath: /usr/src/app/files
           env:
-          - name: PORT
-            value: "5000"
+            - name: BACKEND_URL
+              value: "http://todo-app-backend-svc:2345"
+        - name: todo-app-backend
+          image: todo-app-backend:latest
+          imagePullPolicy: Never
           volumeMounts:
             - name: todo-app-vol
               mountPath: /usr/src/app/files

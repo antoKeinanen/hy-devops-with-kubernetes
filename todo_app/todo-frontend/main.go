@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -20,6 +22,11 @@ const (
 
 type Metadata struct {
 	LastFetched time.Time `json:"last_fetched"`
+}
+
+type Todo struct {
+	ID   int    `json:"id"`
+	Text string `json:"text"`
 }
 
 var (
@@ -38,7 +45,18 @@ func main() {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	content := `
+	todos, err := fetchTodos()
+	if err != nil {
+		http.Error(w, "Failed to fetch todos", http.StatusInternalServerError)
+		return
+	}
+
+	var todoItems strings.Builder
+	for _, todo := range todos {
+		todoItems.WriteString(fmt.Sprintf("<li>%s</li>", html.EscapeString(todo.Text)))
+	}
+
+	content := fmt.Sprintf(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,27 +72,78 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
     <img
       class="image-card"
       src="/image"
-      widht="250"
+      width="250"
       height="250"
     />
 
-    <form>
-	<input placeholder="Enter a new todo (max 140 characters)" minlenght="1" maxlength="140" required />
-	<input type="submit" />
+    <form id="todoForm" action="/todos" method="POST">
+      <input name="text" id="text" placeholder="Enter a new todo (max 140 characters)" minlength="1" maxlength="140" required />
+      <input type="submit" />
     </form>
 
     <ul>
-	<li>Learn kubernetes basics</li>
-	<li>Deploy application to cluster</li>
-	<li>Configure persistent groups</li>
+      %s
     </ul>
 
     <p>DevOps with Kubernetes 2026</p>
   </main>
+
+
+<script>
+  const form = document.getElementById("todoForm");
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const text = document.getElementById("text").value;
+
+    const response = await fetch("/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
+    });
+
+    if (!response.ok) {
+      console.error("Failed to submit todo:", response.status);
+      return;
+    }
+
+    window.location.reload();
+  });
+
+</script>
+
 </body>
-	</html>
-	`
+</html>
+`, todoItems.String())
+
 	w.Write([]byte(content))
+}
+
+func fetchTodos() ([]Todo, error) {
+	backendURL := os.Getenv("BACKEND_URL")
+	if backendURL == "" {
+		backendURL = "http://localhost:8089"
+	}
+
+	resp, err := http.Get(backendURL + "/todos")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("backend returned status %d", resp.StatusCode)
+	}
+
+	var todos []Todo
+	if err := json.NewDecoder(resp.Body).Decode(&todos); err != nil {
+		return nil, err
+	}
+
+	return todos, nil
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request) {
