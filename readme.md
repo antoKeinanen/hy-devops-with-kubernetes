@@ -15,3 +15,4 @@
 - [2.3](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/2.3)
 - [2.4](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/2.4)
 
+- [2.5](https://github.com/antoKeinanen/hy-devops-with-kubernetes/tree/2.5)

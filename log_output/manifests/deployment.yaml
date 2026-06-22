@@ -17,13 +17,25 @@ spec:
         - name: log-output-vol
           persistentVolumeClaim:
             claimName: log-output-pvc  
+        - name: log-output-config
+          configMap:
+            name: log-output-config
       containers:
         - name: log-output-server
           image: log-output-server:latest
           imagePullPolicy: Never
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: log-output-config
+                  key: MESSAGE
           volumeMounts:
             - name: log-output-vol
               mountPath: /usr/src/app/files
+            - name: log-output-config
+              mountPath: /usr/src/app/config
+              readOnly: true
         - name: log-output-writer
           image: log-output-writer:latest
           imagePullPolicy: Never
